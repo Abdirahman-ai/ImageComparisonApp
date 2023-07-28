@@ -1,4 +1,10 @@
+import sys
+# prints out the location of Virtual invorment 
+# to run the program correcly cd to this location
+# then activate it with the following commands
+# source myenv/bin/activate
 
+print(sys.executable) 
 
 import cv2
 import tkinter as tk
