@@ -1,10 +1,10 @@
 import sys
-# prints out the location of Virtual invorment 
-# to run the program correcly cd to this location
-# then activate it with the following commands
-# source myenv/bin/activate
-
 print(sys.executable) 
+# cd /usr/local/bin/ (this is where the virtual environmen is installed ) then 
+# source myenv/bin/activate (activitate it) then run
+# python3  /Users/abdikafarahmed/Desktop/ImageDiffApp/ImageComparisonApp/ImageDiff.py
+
+
 
 import cv2
 import tkinter as tk
