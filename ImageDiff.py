@@ -1,17 +1,9 @@
 import sys
-print(sys.executable) 
-# cd /usr/local/bin/ (this is where the virtual environmen is installed ) then 
-# source myenv/bin/activate (activitate it) then run
-# python3  /Users/abdikafarahmed/Desktop/ImageDiffApp/ImageComparisonApp/ImageDiff.py
-
-
-
 import cv2
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from skimage.metrics import structural_similarity as ssim
-import tkinter.ttk as ttk
 
 def resize_images(image1, image2, new_size):
     # Maintain the aspect ratio while resizing
@@ -43,7 +35,7 @@ def compare_images(image1, image2):
     (score, diff) = ssim(gray_image1, gray_image2, full=True)
     return score, diff
 
-def show_difference_image():
+def update_images():
     file_path1 = filedialog.askopenfilename()
     file_path2 = filedialog.askopenfilename()
 
@@ -51,16 +43,20 @@ def show_difference_image():
         image1 = cv2.imread(file_path1)
         image2 = cv2.imread(file_path2)
 
+        # Calculate the new size based on the window size
+        window_width = root.winfo_width()
+        window_height = root.winfo_height()
+        new_size = min(window_width, window_height) - 100
+
         # Optionally, resize the images (uncomment the next line if needed)
-        image1, image2 = resize_images(image1, image2, new_size=500)
+        image1, image2 = resize_images(image1, image2, new_size)
 
         ssim_score, diff_image = compare_images(image1, image2)
 
         # Display the SSIM score and result
         result_label.config(text=f"SSIM Score: {ssim_score:.4f}")
 
-
-        # Display the SSIM score and result
+        # Display the similarity message
         if ssim_score == 1.0:
             message = "The images are identical."
         elif ssim_score > 0.8:
@@ -79,7 +75,19 @@ def show_difference_image():
         diff_label.config(image=diff_image_tk)
         diff_label.image = diff_image_tk  # Keep a reference to prevent garbage collection
 
-    
+        # Display the original images side by side
+        image1_pil = Image.fromarray(cv2.cvtColor(image1, cv2.COLOR_BGR2RGB))
+        image2_pil = Image.fromarray(cv2.cvtColor(image2, cv2.COLOR_BGR2RGB))
+        image1_tk = ImageTk.PhotoImage(image1_pil)
+        image2_tk = ImageTk.PhotoImage(image2_pil)
+
+        image_label1.config(image=image1_tk)
+        image_label2.config(image=image2_tk)
+
+        image_label1.image = image1_tk  # Keep a reference to prevent garbage collection
+        image_label2.image = image2_tk  # Keep a reference to prevent garbage collection
+
+
 # Create the Tkinter application and the GUI layout
 root = tk.Tk()
 root.title("Image Comparison App")
@@ -89,15 +97,19 @@ intro_label = tk.Label(root, text="Welcome to Image Comparison App!", font=("Ari
 intro_label.grid(row=0, column=0, columnspan=2, padx=30, pady=30)
 
 # Create buttons and labels
-load_button = tk.Button(root, text="Load Images", command=show_difference_image)
+load_button = tk.Button(root, text="Load Images", command=update_images)
 result_label = tk.Label(root, text="", font=("Arial", 12, "bold"))
 message_label = tk.Label(root, text="", font=("Arial", 12, "bold"))
 diff_label = tk.Label(root)
+image_label1 = tk.Label(root)
+image_label2 = tk.Label(root)
 
 # Grid layout for other widgets
 load_button.grid(row=1, column=0, padx=40, pady=40)
 result_label.grid(row=1, column=1, padx=40, pady=40)
 message_label.grid(row=2, column=0, columnspan=2, padx=40, pady=40)
-diff_label.grid(row=3, column=0, columnspan=2, padx=40, pady=40)
+image_label1.grid(row=3, column=0, padx=40, pady=40)
+image_label2.grid(row=3, column=1, padx=40, pady=40)
+diff_label.grid(row=4, column=0, columnspan=2, padx=40, pady=40)
 
 root.mainloop()
