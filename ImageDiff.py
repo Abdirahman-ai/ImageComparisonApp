@@ -65,6 +65,9 @@ def update_images():
             message = "The images have differences."
         message_label.config(text=message)
 
+        # Clear the diff_label before displaying the difference image
+        diff_label.config(image=None)
+
         # Convert the difference image to a suitable data type for RGB conversion
         diff_image = cv2.convertScaleAbs(diff_image)
 
@@ -72,7 +75,9 @@ def update_images():
         diff_image_rgb = cv2.cvtColor(diff_image, cv2.COLOR_BGR2RGB)
         diff_image_pil = Image.fromarray(diff_image_rgb)
         diff_image_tk = ImageTk.PhotoImage(diff_image_pil)
-        diff_label.config(image=diff_image_tk)
+
+        # Update diff_label with the new difference image and resize it
+        diff_label.config(image=diff_image_tk, width=new_size, height=new_size)
         diff_label.image = diff_image_tk  # Keep a reference to prevent garbage collection
 
         # Display the original images side by side
@@ -92,14 +97,24 @@ def update_images():
 root = tk.Tk()
 root.title("Image Comparison App")
 
-# Create an introductory label
-intro_label = tk.Label(root, text="Welcome to Image Comparison App!", font=("Arial", 16, "bold"))
-intro_label.grid(row=0, column=0, columnspan=2, padx=30, pady=30)
+# ... (previous code)
+
+# Create a description label
+description_text = "This application allows you to compare two images and shows their structural similarity.\n\n"
+description_text += "1. Click the 'Load Images' button to select two images you want to compare.\n"
+description_text += "2. The images will be displayed side by side, and the difference image will be shown above.\n"
+description_text += "3. The Structural Similarity Index (SSIM) score will indicate the similarity between the images.\n"
+description_text += "4. A higher SSIM score indicates a higher similarity between the images.\n\n"
+description_text += "Please note that SSIM values close to 1.0 indicate the images are nearly identical, while values\n"
+description_text += "closer to 0 indicate more dissimilarity. Images that are visually similar tend to have higher SSIM scores."
+
+message_label = tk.Label(root, text=description_text, font=("Arial", 12), justify='left', anchor='w')
+message_label.grid(row=1, column=0, columnspan=2, padx=30, pady=10)
 
 # Create buttons and labels
 load_button = tk.Button(root, text="Load Images", command=update_images)
 result_label = tk.Label(root, text="", font=("Arial", 12, "bold"))
-message_label = tk.Label(root, text="", font=("Arial", 12, "bold"))
+message_label2 = tk.Label(root, text="", font=("Arial", 12, "bold"))
 diff_label = tk.Label(root)
 image_label1 = tk.Label(root)
 image_label2 = tk.Label(root)
