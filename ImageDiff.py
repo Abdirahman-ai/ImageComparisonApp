@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from skimage.metrics import structural_similarity as ssim
-
+ 
 def resize_images(image1, image2, new_size):
     # Maintain the aspect ratio while resizing
     h1, w1 = image1.shape[:2]
@@ -34,6 +34,8 @@ def compare_images(image1, image2):
     gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
     (score, diff) = ssim(gray_image1, gray_image2, full=True)
     return score, diff
+
+# ... (previous code)
 
 def update_images():
     file_path1 = filedialog.askopenfilename()
@@ -92,6 +94,8 @@ def update_images():
         image_label1.image = image1_tk  # Keep a reference to prevent garbage collection
         image_label2.image = image2_tk  # Keep a reference to prevent garbage collection
 
+# ... (rest of the code)
+
 
 # Create the Tkinter application and the GUI layout
 root = tk.Tk()
@@ -112,19 +116,19 @@ message_label = tk.Label(root, text=description_text, font=("Arial", 12), justif
 message_label.grid(row=1, column=0, columnspan=2, padx=30, pady=10)
 
 # Create buttons and labels
-load_button = tk.Button(root, text="Load Images", command=update_images)
 result_label = tk.Label(root, text="", font=("Arial", 12, "bold"))
 message_label2 = tk.Label(root, text="", font=("Arial", 12, "bold"))
 diff_label = tk.Label(root)
 image_label1 = tk.Label(root)
 image_label2 = tk.Label(root)
+load_button = tk.Button(root, text="Load Images", command=update_images)
 
 # Grid layout for other widgets
-load_button.grid(row=1, column=0, padx=40, pady=40)
-result_label.grid(row=1, column=1, padx=40, pady=40)
-message_label.grid(row=2, column=0, columnspan=2, padx=40, pady=40)
-image_label1.grid(row=3, column=0, padx=40, pady=40)
-image_label2.grid(row=3, column=1, padx=40, pady=40)
-diff_label.grid(row=4, column=0, columnspan=2, padx=40, pady=40)
+result_label.grid(row=2, column=0, columnspan=2, padx=40, pady=10)
+message_label2.grid(row=3, column=0, columnspan=2, padx=40, pady=10)
+image_label1.grid(row=4, column=0, padx=40, pady=10)
+image_label2.grid(row=4, column=1, padx=40, pady=10)
+diff_label.grid(row=5, column=0, columnspan=2, padx=40, pady=10)
+load_button.grid(row=6, column=0, columnspan=2, padx=40, pady=20)
 
 root.mainloop()
