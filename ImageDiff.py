@@ -48,8 +48,6 @@ def compare_images(image1, image2):
     (score, diff) = ssim(gray_image1, gray_image2, full=True)
     return score, diff
 
-# ... (previous code)
-
 # A function to update the displayed images and comparison results
 def update_images():
     # Ask the user to select two image files
@@ -111,13 +109,9 @@ def update_images():
         image_label1.image = image1_tk  # Keep a reference to prevent garbage collection
         image_label2.image = image2_tk  # Keep a reference to prevent garbage collection
 
-# ... (rest of the code)
-
 # Create the Tkinter application and the GUI layout
 root = tk.Tk()
 root.title("Image Comparison App")
-
-# ... (previous code)
 
 # Create a description label
 description_text = "This application allows you to compare two images and shows their structural similarity.\n\n"
@@ -131,7 +125,6 @@ description_text += "closer to 0 indicate more dissimilarity. Images that are vi
 message_label = tk.Label(root, text=description_text, font=("Arial", 12), justify='left', anchor='w')
 message_label.grid(row=1, column=0, columnspan=2, padx=30, pady=10)
 
-# ... (previous code)
 
 # Create buttons and labels for the image comparison
 result_label = tk.Label(root, text="", font=("Arial", 12, "bold"))
